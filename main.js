@@ -1,6 +1,10 @@
-// Инициализация Telegram WebApp API
-Telegram.WebApp.ready();
-console.log('WebApp API загружен:', Telegram.WebApp.initData);
+// Проверяем, доступен ли Telegram WebApp API
+if (typeof Telegram !== 'undefined') {
+    Telegram.WebApp.ready();
+    console.log('WebApp API загружен:', Telegram.WebApp.initData);
+} else {
+    console.log('WebApp API недоступен. Приложение работает вне Telegram.');
+}
 
 // Получаем элементы страницы
 const rateDiv = document.getElementById('rate');
@@ -29,11 +33,19 @@ async function getExchangeRate() {
 
 // Обработка нажатий на кнопки
 likeButton.addEventListener('click', () => {
-    Telegram.WebApp.showAlert('Тогда бегом менять валюту!');
+    if (typeof Telegram !== 'undefined') {
+        Telegram.WebApp.showAlert('Тогда бегом менять валюту!');
+    } else {
+        alert('Тогда бегом менять валюту!');  // Замена для тестов вне Telegram
+    }
 });
 
 dislikeButton.addEventListener('click', () => {
-    Telegram.WebApp.showAlert('Заходи завтра');
+    if (typeof Telegram !== 'undefined') {
+        Telegram.WebApp.showAlert('Заходи завтра');
+    } else {
+        alert('Заходи завтра');  // Замена для тестов вне Telegram
+    }
 });
 
 // Запрашиваем курс при загрузке приложения
