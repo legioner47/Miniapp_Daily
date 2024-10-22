@@ -1,27 +1,31 @@
 // Инициализация Telegram WebApp API
 Telegram.WebApp.ready();
 
-// Получаем элемент textarea и кнопку сохранения
-const note = document.getElementById('note');
-const saveButton = document.getElementById('saveButton');
+// Получаем элементы страницы
+const rateDiv = document.getElementById('rate');
+const likeButton = document.getElementById('likeButton');
+const dislikeButton = document.getElementById('dislikeButton');
 
-// Функция для загрузки сохраненной заметки
-function loadNote() {
-    const savedNote = localStorage.getItem('telegramNote');
-    if (savedNote) {
-        note.value = savedNote;
+// Функция для получения курса валют
+async function getExchangeRate() {
+    try {
+        const response = await fetch('https://v6.exchangerate-api.com/v6/d2d80c6b64e3aa2dfa0da11e/latest/USD');
+        const data = await response.json();
+        const usdToRub = data.conversion_rates.RUB;
+        rateDiv.textContent = `1 USD = ${usdToRub} RUB`;
+    } catch (error) {
+        rateDiv.textContent = 'Не удалось загрузить курс валют.';
     }
 }
 
-// Функция для сохранения заметки
-function saveNote() {
-    const noteContent = note.value;
-    localStorage.setItem('telegramNote', noteContent);
-    Telegram.WebApp.showAlert('Заметка сохранена!');
-}
+// Обработка нажатий на кнопки
+likeButton.addEventListener('click', () => {
+    Telegram.WebApp.showAlert('Тогда бегом менять валюту!');
+});
 
-// Загрузка заметки при открытии приложения
-loadNote();
+dislikeButton.addEventListener('click', () => {
+    Telegram.WebApp.showAlert('Заходи завтра');
+});
 
-// Обработка события нажатия на кнопку сохранения
-saveButton.addEventListener('click', saveNote);
+// Запрашиваем курс при загрузке приложения
+getExchangeRate();
